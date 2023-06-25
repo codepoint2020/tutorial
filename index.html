@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Adding Record To Firebase</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="text-center mt-4 mb-4">Adding Record To Firebase</h2>
+        <div class="row">
+            <div class="col">
+                <form id="myForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Enter name:</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter a name">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+                </form>
+            </div>
+
+            <div class="col">
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                          
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataHolder">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        const myForm = document.getElementById('myForm');
+        const dataHolder = document.getElementById('dataHolder');
+
+        fetch('https://db-tutorial-69eba-default-rtdb.asia-southeast1.firebasedatabase.app/client.json')
+        .then(response => response.json())
+        .then(data => {
+            for (const key in data) {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `<td>${data[key].name}</td><td>${data[key].email}</td>`
+                dataHolder.appendChild(tr);
+            }
+
+            
+        })
+
+
+       
+
+        myForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+
+            const myData = new FormData(myForm);
+
+            fetch('https://db-tutorial-69eba-default-rtdb.asia-southeast1.firebasedatabase.app/client.json', {
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(myData)),
+            headers: {
+                'Content-Type': 'application/json'
+            } 
+                
+            }).then(() => {
+                myForm.reset();
+            })
+
+        })
+
+       
+
+
+
+
+    </script>
+
+
+    
+      
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    
+</body>
+</html>
